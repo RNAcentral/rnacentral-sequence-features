@@ -1,4 +1,4 @@
-let server = 'https://rnacentral.org';
+let server = 'https://test.rnacentral.org';
 // let server = 'http://127.0.0.1:8001';
 
 
