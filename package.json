@@ -1,0 +1,73 @@
+{
+  "name": "@rnacentral/rnacentral-sequence-features",
+  "version": "1.0.0",
+  "description": "A demo for the RNAcentral sequence features",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build:prod": "node_modules/.bin/webpack --mode production",
+    "build": "npm run clean && npm run build:prod",
+    "profile:build": "node_modules/.bin/webpack --mode production --profile --json > webpack-stats.json",
+    "serve": "node_modules/.bin/webpack-dev-server --mode development --progress --color --history-api-fallback",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RNAcentral/rnacentral-sequence-features.git"
+  },
+  "keywords": [
+    "RNA",
+    "bioinformatics",
+    "sequence"
+  ],
+  "contributors": [
+    {
+      "name": "Blake Sweeney",
+      "email": "bsweeney@ebi.ac.uk"
+    },
+    {
+      "name": "Carlos E. Ribas",
+      "email": "cribas@ebi.ac.uk"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/RNAcentral/rnacentral-sequence-features/issues"
+  },
+  "homepage": "https://github.com/RNAcentral/rnacentral-sequence-features#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.17.0",
+    "d3": "^5.16.0",
+    "data-loader": "^3.5.7",
+    "protvista-manager": "^3.4.0",
+    "protvista-navigation": "^3.5.1",
+    "protvista-sequence": "^3.5.1",
+    "protvista-track": "^3.4.0",
+    "protvista-utils": "^3.5.7",
+    "protvista-zoomable": "^3.4.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.4.0",
+    "dotenv-webpack": "^7.0.3",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "navigator": "~1.0.1",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.2.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.1.0"
+  }
+}
