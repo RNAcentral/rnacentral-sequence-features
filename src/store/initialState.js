@@ -5,6 +5,9 @@ let initialState = {
   cpatOrf: [],
   matureProduct: [],
   rfamHits: [],
+  tooltipX: "",
+  tooltipY: "",
+  tooltipTrack: "",
 };
 
 export default initialState;

@@ -5,6 +5,7 @@ import {store} from "app.jsx";
 import ProtVistaNavigation from "protvista-navigation/src/protvista-navigation";
 import ProtVistaSequence from "protvista-sequence/src/protvista-sequence";
 import ProtVistaManager from "protvista-manager/src/protvista-manager";
+import ProtVistaTooltip from "protvista-tooltip/src/protvista-tooltip";
 import ProtVistaTrack from "protvista-track/src/protvista-track";
 
 
@@ -42,6 +43,9 @@ class Nightingale extends React.Component {
     if (!window.customElements.get('protvista-track')) {
       window.customElements.define('protvista-track', ProtVistaTrack);
     }
+    if (!window.customElements.get('protvista-tooltip')) {
+      window.customElements.define('protvista-tooltip', ProtVistaTooltip);
+    }
   }
 
   componentDidMount() {
@@ -76,10 +80,66 @@ class Nightingale extends React.Component {
     )
   }
 
+  getDetails(tooltipTrack){
+    // a single protvista-track can display multiple tracks, we need to
+    // find out which track the user selected to show the correct details
+    const tags = document.getElementsByTagName('rnacentral-sequence-features');
+    const selectedElement = tags[0].shadowRoot.elementFromPoint(this.props.tooltipX, this.props.tooltipY);
+    const parentElementId = selectedElement.parentNode.parentNode.parentNode.id.replace("g_", "");
+    let results = ""
+
+    if(tooltipTrack==="Rfam families"){
+      this.props.rfamHits.map(item => {
+        if (item.accession===parentElementId){
+          results = item.details.id + ": " + item.details.name
+        }
+      })
+    } else if(tooltipTrack==="Anticodon"){
+      this.props.anticodon.map(item => {
+        if (item.accession===parentElementId){
+          results = "Isotype: " + item.details.isotype + ", Sequence: " + item.details.sequence
+        }
+      })
+    } else if(tooltipTrack==="CPAT ORF"){
+      this.props.cpatOrf.map(item => {
+        if (item.accession===parentElementId){
+          results = "Coding probability: " +
+              item.details.coding_probability.toFixed(3) +
+              ", Min cutoff: " +
+              item.details.cutoff.toFixed(3)
+        }
+      })
+    } else if(tooltipTrack==="Mature miRNA"){
+      this.props.matureProduct.map(item => {
+        if (item.accession===parentElementId){
+          results = item.details.related.replace("MIRBASE:", "")
+        }
+      })
+    } else if(tooltipTrack==="Conserved features"){
+      this.props.conservedRnaStructure.map(item => {
+        if (item.accession===parentElementId){
+          results = item.details.crs_id
+        }
+      })
+    }
+
+    return results
+  }
+
   render() {
     const seqLength = this.props.sequence.length ? this.props.sequence.length : 100;
+    const tooltipTrack = this.props.tooltipTrack;
+    const tooltipX = this.props.tooltipX;
+    const tooltipY = this.props.tooltipY;
+    const detail = tooltipTrack && tooltipX && tooltipY && this.getDetails(tooltipTrack);
+
     return (
       <div className="rna">
+        {
+          tooltipTrack && detail ? <protvista-tooltip title={tooltipTrack} x={tooltipX} y={tooltipY} visible>
+            { detail }
+          </protvista-tooltip> : ""
+        }
         <protvista-manager length={seqLength} displaystart={1} displayend={seqLength} ref={this.manager}>
           <div className="row">
             <div className="col-2"></div>
@@ -98,7 +158,13 @@ class Nightingale extends React.Component {
               <span className="span-track" style={{backgroundColor: "#d28068"}}></span> Rfam families
             </div>
             <div className="col-10">
-              <protvista-track length={seqLength} layout="non-overlapping" ref={this.rfamHits}></protvista-track>
+              <protvista-track
+                  length={seqLength}
+                  layout="non-overlapping"
+                  ref={this.rfamHits}
+                  onMouseOver={(e) => this.props.onMouseMovement(e, "Rfam families")}
+                  onMouseLeave={(e) => this.props.onMouseMovement(e, "")}
+              ></protvista-track>
             </div>
           </div> : ""
           }
@@ -107,7 +173,13 @@ class Nightingale extends React.Component {
               <span className="span-track" style={{backgroundColor: "#EF36F1FF"}}></span> Anticodon
             </div>
             <div className="col-10">
-              <protvista-track length={seqLength} layout="non-overlapping" ref={this.anticodon}></protvista-track>
+              <protvista-track
+                  length={seqLength}
+                  layout="non-overlapping"
+                  ref={this.anticodon}
+                  onMouseOver={(e) => this.props.onMouseMovement(e, "Anticodon")}
+                  onMouseLeave={(e) => this.props.onMouseMovement(e, "")}
+              ></protvista-track>
             </div>
           </div> : ""
           }
@@ -116,7 +188,13 @@ class Nightingale extends React.Component {
               <span className="span-track" style={{backgroundColor: "#E0C653"}}></span> CPAT ORF
             </div>
             <div className="col-10">
-              <protvista-track length={seqLength} layout="non-overlapping" ref={this.cpatOrf}></protvista-track>
+              <protvista-track
+                  length={seqLength}
+                  layout="non-overlapping"
+                  ref={this.cpatOrf}
+                  onMouseOver={(e) => this.props.onMouseMovement(e, "CPAT ORF")}
+                  onMouseLeave={(e) => this.props.onMouseMovement(e, "")}
+              ></protvista-track>
             </div>
           </div> : ""
           }
@@ -125,7 +203,13 @@ class Nightingale extends React.Component {
               <span className="span-track" style={{backgroundColor: "#660099"}}></span> Mature miRNA
             </div>
             <div className="col-10">
-              <protvista-track length={seqLength} layout="non-overlapping" ref={this.matureProduct}></protvista-track>
+              <protvista-track
+                  length={seqLength}
+                  layout="non-overlapping"
+                  ref={this.matureProduct}
+                  onMouseOver={(e) => this.props.onMouseMovement(e, "Mature miRNA")}
+                  onMouseLeave={(e) => this.props.onMouseMovement(e, "")}
+              ></protvista-track>
             </div>
           </div> : ""
           }
@@ -134,7 +218,13 @@ class Nightingale extends React.Component {
               <span className="span-track" style={{backgroundColor: "#365569"}}></span> Conserved features
             </div>
             <div className="col-10">
-              <protvista-track length={seqLength} layout="non-overlapping" ref={this.conservedRnaStructure}></protvista-track>
+              <protvista-track
+                  length={seqLength}
+                  layout="non-overlapping"
+                  ref={this.conservedRnaStructure}
+                  onMouseOver={(e) => this.props.onMouseMovement(e, "Conserved features")}
+                  onMouseLeave={(e) => this.props.onMouseMovement(e, "")}
+              ></protvista-track>
             </div>
           </div> : ""
           }
@@ -152,9 +242,19 @@ function mapStateToProps(state) {
     cpatOrf: state.cpatOrf,
     matureProduct: state.matureProduct,
     rfamHits: state.rfamHits,
+    tooltipX: state.tooltipX,
+    tooltipY: state.tooltipY,
+    tooltipTrack: state.tooltipTrack,
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onMouseMovement: (e, track) => dispatch(actionCreators.onMouseMovement(e, track)),
+  }
 }
 
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(Nightingale);

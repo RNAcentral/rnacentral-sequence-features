@@ -22,6 +22,13 @@ const rootReducer = function (state = initialState, action) {
         matureProduct: action.matureProduct,
       });
 
+    case actions.TOOLTIP:
+      return Object.assign({}, state, {
+        tooltipX: action.tooltipX,
+        tooltipY: action.tooltipY,
+        tooltipTrack: action.tooltipTrack
+      });
+
     default:
       return state;
   }

@@ -41,6 +41,7 @@
     "protvista-manager": "^3.4.0",
     "protvista-navigation": "^3.5.1",
     "protvista-sequence": "^3.5.1",
+    "protvista-tooltip": "^3.5.8",
     "protvista-track": "^3.4.0",
     "protvista-utils": "^3.5.7",
     "protvista-zoomable": "^3.4.0",
