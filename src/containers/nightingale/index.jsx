@@ -132,6 +132,8 @@ class Nightingale extends React.Component {
     const tooltipX = this.props.tooltipX;
     const tooltipY = this.props.tooltipY;
     const detail = tooltipTrack && tooltipX && tooltipY && this.getDetails(tooltipTrack);
+    // TODO: fix layout when there are more than two families
+    const rfamFamilies = [...new Set(this.props.rfamHits.map(item => item.details.id))];
 
     return (
       <div className="rna">
@@ -155,7 +157,12 @@ class Nightingale extends React.Component {
           </div>
           { this.props.rfamHits.length !== 0 ? <div className="row">
             <div className="col-2 div-track">
-              <span className="span-track" style={{backgroundColor: "#d28068"}}></span> Rfam families
+              <span className="span-track" style={{backgroundColor: "#d28068"}}></span> Rfam family
+              { rfamFamilies.map((item, index) => (
+                <span key={index} style={{marginLeft: "5px"}}>
+                  <a href={`http://rfam.org/family/${item}`} target="_blank">{item}</a>
+                </span>
+              ))}
             </div>
             <div className="col-10">
               <protvista-track
